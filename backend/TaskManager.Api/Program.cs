@@ -5,70 +5,66 @@ using Microsoft.IdentityModel.Tokens;
 using TaskManager.Infrastructure;
 
 namespace TaskManager.API;
-    public class Program
+public class Program
+{
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+        // Add services to the container.
+        builder.Services.AddControllers();
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+        builder.Services.AddDbContext<AppDbContext>(opt =>
+            opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+        );
 
-            builder.Services.AddDbContext<AppDbContext>(opt =>
-                opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
-            );
+        // builder.Services.AddScoped<IUserRepository, UserRepository>();
+        // builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+        // builder.Services.AddScoped<IAuthService, AuthService>();
+        // builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
-            // builder.Services.AddScoped<IUserRepository, UserRepository>();
-            // builder.Services.AddScoped<ITaskRepository, TaskRepository>();
-            // builder.Services.AddScoped<IAuthService, AuthService>();
-            // builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-
-            // JWT AUTH
-            builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    var cfg = builder.Configuration;
-
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = cfg["Jwt:Issuer"],
-                        ValidAudience = cfg["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(cfg["Jwt:Key"]!)
-                        )
-                    };
-                });
-
-            builder.Services.AddAuthorization();
-
-
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+        // JWT AUTH
+        builder.Services.AddAuthentication(Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                var cfg = builder.Configuration;
 
-            app.UseHttpsRedirection();
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = cfg["Jwt:Issuer"],
+                    ValidAudience = cfg["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(cfg["Jwt:Key"]!)
+                    )
+                };
+            });
 
-            app.UseAuthentication();
+        builder.Services.AddAuthorization();
 
-            app.UseAuthorization();
+        var app = builder.Build();
 
-
-            app.MapControllers();
-
-            app.Run();
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
     }
+}
