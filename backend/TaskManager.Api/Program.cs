@@ -17,9 +17,9 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        // builder.Services.AddDbContext<AppDbContext>(opt =>
-        //     opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
-        // );
+        builder.Services.AddDbContext<AppDbContext>(opt =>
+            opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+        );
 
         // builder.Services.AddScoped<IUserRepository, UserRepository>();
         // builder.Services.AddScoped<ITaskRepository, TaskRepository>();
@@ -74,6 +74,7 @@ public class Program
     private static void AutoAddDbMigration(WebApplication app)
     {
         var retries = 5;
+        Exception? lastException = null;
         while (retries > 0)
         {
             try
@@ -81,13 +82,22 @@ public class Program
                 using var scope = app.Services.CreateScope();
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 db.Database.Migrate();
+                Console.WriteLine("Database migration completed successfully.");
+                lastException = null;
                 break;
             }
-            catch
+            catch(Exception ex)
             {
                 retries--;
+                lastException = ex;
                 Thread.Sleep(2000);
             }
+        }
+
+        if(lastException != null)
+        {
+            Console.WriteLine("Database migration failed after 5 attempts.");
+            Console.WriteLine(lastException.Message);
         }
     }
 }
