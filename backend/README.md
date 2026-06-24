@@ -69,6 +69,6 @@ docker inspect <container_id> | grep IPAddress
 
 ## Links
 - [Clean Architecture Overview](CLEANARCHITECTURE.md)
-- https://sharpskill.dev/en/blog/dotnet/clean-architecture-dotnet-practical-guide
-- https://dev.to/ravivis13370227/clean-architecture-in-net-application-step-by-step-2ol0
-- https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
+- [Clean Architecture with .NET: Practical Guide](https://sharpskill.dev/en/blog/dotnet/clean-architecture-dotnet-practical-guide)
+- [Clean Architecture in .net application step by step](https://dev.to/ravivis13370227/clean-architecture-in-net-application-step-by-step-2ol0)
+- [Applying Migrations](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli)
