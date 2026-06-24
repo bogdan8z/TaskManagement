@@ -65,6 +65,7 @@ docker inspect <container_id> | grep IPAddress
 > docker exec -it sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U SA -C
 > select name from sys.databases
 > GO
+```
 
 ## Links
 - [Clean Architecture Overview](CLEANARCHITECTURE.md)
