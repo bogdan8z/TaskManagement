@@ -16,6 +16,7 @@ A personal project to demonstrate production-ready backend architecture and mode
 
 ## Backend
 - Built with ASP.NET Core (.NET 9).
+- Unit Tests.
 - Exposes REST endpoints for authentication and task management.
 - Uses Entity Framework Core with SQL Server for persistence.
 - Implements JWT-based authentication and Swagger for API exploration.
