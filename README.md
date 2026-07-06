@@ -1,4 +1,4 @@
-# Enterprise Task Managgement System
+# Enterprise Task Management System
 
 A personal project to demonstrate production-ready backend architecture and modern frontend development practices.
 
