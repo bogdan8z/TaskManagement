@@ -1,6 +1,6 @@
-# Task Manager
+# Enterprise Task Managgement System
 
-A simple full-stack task management application composed of a React frontend and a .NET backend.
+A personal project to demonstrate production-ready backend architecture and modern frontend development practices.
 
 ## What the project does
 - Lets users register and log in securely.
@@ -12,12 +12,16 @@ A simple full-stack task management application composed of a React frontend and
 - Provides the login/register experience and the task dashboard UI.
 - Uses browser-based fetch requests to talk to the backend.
 - Sends JWT tokens in the Authorization header for protected requests.
+- REST API integration.
 
 ## Backend
 - Built with ASP.NET Core (.NET 9).
 - Exposes REST endpoints for authentication and task management.
 - Uses Entity Framework Core with SQL Server for persistence.
 - Implements JWT-based authentication and Swagger for API exploration.
+- Clean Architecture.
+- Repository Pattern.
+- Swagger.
 
 ## Project structure
 ```text
