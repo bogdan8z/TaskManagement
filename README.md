@@ -23,6 +23,7 @@ A personal project to demonstrate production-ready backend architecture and mode
 - Repository Pattern.
 - Swagger.
 - FluentValidation.
+- Docker.
 
 ## Project structure
 ```text
