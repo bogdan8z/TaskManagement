@@ -22,6 +22,7 @@ A personal project to demonstrate production-ready backend architecture and mode
 - Clean Architecture.
 - Repository Pattern.
 - Swagger.
+- FluentValidation.
 
 ## Project structure
 ```text
