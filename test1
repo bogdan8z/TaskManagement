@@ -1,0 +1,143 @@
+
+		
+!!!!!!		in-memory testing database!!!!!!!!!!
+		  var optionBuilder  = new DbContentextOptionsBuilder<ApplicationConext>().UseInmemoryDtabase(Guid.NewGuid().ToString());
+      var context = new ApplicationContext(optionBuilder.Options)
+	  var id = guid.newguid()
+	  context.Companies.Add(new Company{
+	  Id = id});
+	  context.SaveChanges();
+	  
+	  
+	  
+	  
+	  
+	  
+	  responseParser.js
+	  export async function parseApiResponse(res) {
+  const text = await res.text()
+
+  if (!text) {
+    return null
+  }
+
+  try {
+    return JSON.parse(text)
+  } catch {
+    return text
+  }
+}
+-------
+login.jsx
+import React, { useState } from 'react'
+import { login, register } from '../api'
+
+export default function Login({ onLogin }) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
+  const [isRegister, setIsRegister] = useState(false)
+
+  async function submit() {
+    setError(null)
+    try {
+      const fn = isRegister ? register : login
+      const response = await fn(email, password)
+      const token = typeof response === 'string'
+        ? response
+        : response?.token || response?.accessToken || response?.data?.token
+
+      if (token) {
+        onLogin(token)
+      } else {
+        throw new Error('Invalid token response')
+      }
+    } catch (err) {
+      setError(err?.message || String(err))
+    }
+  }
+
+  return (
+    <div className="card">
+      <h2>{isRegister ? 'Register' : 'Login'}</h2>
+      <label>
+        Email
+        <input value={email} onChange={(e) => setEmail(e.target.value)} />
+      </label>
+      <label>
+        Password
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      </label>
+      <div style={{display: 'flex', gap: 8}}>
+        <button onClick={submit}>{isRegister ? 'Register' : 'Login'}</button>
+        <button onClick={() => setIsRegister(!isRegister)} style={{background:'#6b7280'}}>
+          {isRegister ? 'Have an account? Login' : 'No account? Register'}
+        </button>
+      </div>
+      {error && <div className="error">{error}</div>}
+    </div>
+  )
+}
+------------
+api.js
+import { parseApiResponse } from './responseParser'
+
+function getApiBase() {
+  // In Codespaces, construct the backend URL using the same domain
+  if (window.location.hostname.includes('app.github.dev')) {
+    // Extract the codespace ID from the hostname
+    // Format: {codespace-id}-{port}.app.github.dev
+    const match = window.location.hostname.match(/^(.+?)-\d+\.app\.github\.dev$/)
+    if (match) {
+      const codespaceId = match[1]
+      return `https://${codespaceId}-5253.app.github.dev`
+    }
+  }
+  // Fallback for local development
+  return import.meta.env.VITE_API_BASE || 'http://localhost:5253'
+}
+
+const API_BASE = getApiBase()
+
+async function request(path, options = {}) {
+  const url = `${API_BASE}${path}`
+  const res = await fetch(url, options)
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(text || res.statusText)
+  }
+
+  return parseApiResponse(res)
+}
+
+export function login(email, password) {
+  return request('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  })
+}
+
+export function register(email, password) {
+  return request('/api/auth/register', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json'      
+    },
+    body: JSON.stringify({ email, password }),
+  })
+}
+
+export function getTasks(token) {
+  return request('/tasks', {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+}
+
+export function createTask(token, title) {
+  return request('/tasks', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ title }),
+  })
+}
