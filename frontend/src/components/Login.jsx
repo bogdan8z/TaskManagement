@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Button, Card, TextInput, Label, Alert } from 'flowbite-react'
 import { login, register } from '../api'
 
 export default function Login({ onLogin }) {
@@ -26,23 +27,59 @@ export default function Login({ onLogin }) {
   }
 
   return (
-    <form className="card" onSubmit={submit}>
-      <h2>{isRegister ? 'Register' : 'Login'}</h2>
-      <label>
-        Email
-        <input value={email} onChange={(e) => setEmail(e.target.value)} />
-      </label>
-      <label>
-        Password
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      </label>
-      <div style={{display: 'flex', gap: 8}}>
-        <button type="submit">{isRegister ? 'Register' : 'Login'}</button>
-        <button type="button" onClick={() => setIsRegister(!isRegister)} style={{background:'#6b7280'}}>
-          {isRegister ? 'Have an account? Login' : 'No account? Register'}
-        </button>
+    <div className="min-h-screen bg-slate-50 py-10">
+      <div className="mx-auto w-full max-w-md px-4">
+        <Card>
+          <h2 className="text-2xl font-semibold text-slate-900 mb-4">
+            {isRegister ? 'Register' : 'Login'}
+          </h2>
+
+          {error && (
+            <Alert color="failure" className="mb-4">
+              <span>{error}</span>
+            </Alert>
+          )}
+
+          <form className="flex flex-col gap-4" onSubmit={submit}>
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="email" value="Email" />
+              </div>
+              <TextInput
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            <div>
+              <div className="mb-2 block">
+                <Label htmlFor="password" value="Password" />
+              </div>
+              <TextInput
+                id="password"
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <Button type="submit">
+                {isRegister ? 'Register' : 'Login'}
+              </Button>
+              <Button color="gray" outline type="button" onClick={() => setIsRegister(!isRegister)}>
+                {isRegister ? 'Have an account? Login' : 'No account? Register'}
+              </Button>
+            </div>
+          </form>
+        </Card>
       </div>
-      {error && <div className="error">{error}</div>}
-    </form>
+    </div>
   )
 }
