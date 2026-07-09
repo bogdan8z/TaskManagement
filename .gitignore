@@ -2,3 +2,5 @@
 [Oo]bj/
 */node_modules/*
 frontend/package-lock.json
+dist/
+frontend/dist/
