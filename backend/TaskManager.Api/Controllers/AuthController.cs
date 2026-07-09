@@ -23,7 +23,10 @@ public class AuthController(IAuthService auth) : ControllerBase
     public async Task<IActionResult> Login(AuthRequest req)
     {
         var token = await _auth.Login(req.Email, req.Password);
-        return Ok(token);
+        return Ok(new 
+        {            
+            token = token        
+        });
     }
 }
 
