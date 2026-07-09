@@ -25,7 +25,7 @@ export default function Login({ onLogin }) {
       setError(err?.message || String(err))
     }
   }
-
+  
   return (
     <div className="min-h-screen bg-slate-50 py-10">
       <div className="mx-auto w-full max-w-md px-4">
@@ -33,13 +33,11 @@ export default function Login({ onLogin }) {
           <h2 className="text-2xl font-semibold text-slate-900 mb-4">
             {isRegister ? 'Register' : 'Login'}
           </h2>
-
           {error && (
             <Alert color="failure" className="mb-4">
               <span>{error}</span>
             </Alert>
           )}
-
           <form className="flex flex-col gap-4" onSubmit={submit}>
             <div>
               <div className="mb-2 block">
@@ -54,7 +52,6 @@ export default function Login({ onLogin }) {
                 required
               />
             </div>
-
             <div>
               <div className="mb-2 block">
                 <Label htmlFor="password" value="Password" />
@@ -68,9 +65,8 @@ export default function Login({ onLogin }) {
                 required
               />
             </div>
-
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <Button type="submit">
+              <Button color="gray" outline type="button" type="submit">
                 {isRegister ? 'Register' : 'Login'}
               </Button>
               <Button color="gray" outline type="button" onClick={() => setIsRegister(!isRegister)}>
