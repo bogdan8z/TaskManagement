@@ -11,9 +11,22 @@ using TaskManager.Infrastructure.Service;
 namespace TaskManager.API;
 public class Program
 {
+    const string allowSpecificOrigins = "_allowSpecificOrigins";
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(allowSpecificOrigins,
+                policy =>
+                {
+                    policy.WithOrigins("http://localhost:5173")
+                                         .AllowAnyOrigin()
+                                          .AllowAnyMethod()
+                                          .AllowAnyHeader();
+                });
+        });
 
         // Add services to the container.
         builder.Services.AddControllers();
@@ -21,12 +34,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        // Resolve connection string from configuration or environment fallback
-        var connectionString = AppDbContextFactory.GetConnectionString(builder.Configuration);
-
-        builder.Services.AddDbContext<AppDbContext>(opt =>
-            opt.UseSqlServer(connectionString)
-        );
+        ConnectToDb(builder);
 
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<ITaskRepository, TaskRepository>();
@@ -73,6 +81,24 @@ public class Program
 
         app.MapControllers();
 
+        app.UseCors(allowSpecificOrigins);
+
         app.Run();
+    }
+    private static void ConnectToDb(WebApplicationBuilder builder)
+    {
+        var useInMemoryDatabase = builder.Configuration.GetValue<bool?>("UseInMemoryDatabase");
+        if(useInMemoryDatabase == true)
+        {
+            builder.Services.AddDbContext<AppDbContext>(opt =>
+                  opt.UseInMemoryDatabase("db-name-1"));    
+        }
+        else
+        {
+        // Resolve connection string from configuration or environment fallback
+            var connectionString = AppDbContextFactory.GetConnectionString(builder.Configuration);
+            builder.Services.AddDbContext<AppDbContext>(opt =>
+                opt.UseSqlServer(connectionString));
+        }        
     }
 }
