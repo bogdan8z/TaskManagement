@@ -73,6 +73,7 @@ docker inspect <container_id> | grep IPAddress
 > select name from sys.databases
 > GO
 ```
+- For testing you can skip docker setup and use in memory database by setting UseInMemoryDatabase to true in appsettings
 
 ## Links
 - [Clean Architecture Overview](CLEANARCHITECTURE.md)
