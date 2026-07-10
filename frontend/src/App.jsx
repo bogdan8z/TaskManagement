@@ -7,7 +7,6 @@ export default function App() {
 
   return (
     <div className="app-container">
-      <h1>Task Manager Dashboard</h1>
       {!token ? (
         <Login onLogin={setToken} />
       ) : (
