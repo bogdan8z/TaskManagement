@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, TextInput, Label, Spinner, Alert } from 'flowbite-react'
+import { Button, Card, TextInput, Label, Spinner, Alert, Avatar, Badge } from 'flowbite-react'
+import { FiMinusCircle, FiPocket  } from "react-icons/fi";
+
 import { getTasks, createTask } from '../api'
 
 export default function TaskDashboard({ token, onLogout }) {
@@ -53,9 +55,12 @@ export default function TaskDashboard({ token, onLogout }) {
             <h2 className="text-3xl font-semibold text-slate-900">Your Tasks</h2>
             <p className="mt-1 text-sm text-slate-500">A quick place to manage your task list.</p>
           </div>
-          <Button color="light" outline onClick={onLogout}>
+          <div className="flex flex-wrap gap-2">
+          <Avatar img="/images/prf-50.jpg" alt="avatar of you" rounded />          
+          <Button color="dark" outline onClick={onLogout}>
             Logout
           </Button>
+          </div>
         </div>
 
         <Card>
@@ -95,15 +100,29 @@ export default function TaskDashboard({ token, onLogout }) {
               You have no tasks yet. Add your first one to get started.
             </div>
           )}
-
           {!loading && !error && tasks.length > 0 && (
             <div className="grid gap-3">
               {tasks.map((task) => (
                 <Card key={task.id} className="bg-slate-50">
-                  <p className="text-base text-slate-800">{task.title}</p>
+                   <div className="flex items-center space-x-4">
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium text-gray-900 dark:text-white">{task.title}</p>
+                        <p className="truncate text-sm text-gray-500 dark:text-gray-400"></p>
+                      </div>
+                      <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+                        {task.isCompleted ? (
+                        <div><Badge color="success" icon={FiPocket} /></div>
+                      ) : (
+                     <div><Badge color="indigo" icon={FiMinusCircle} /></div>
+                      )}
+                        </div>
+                  </div>
                 </Card>
               ))}
             </div>
+           
+           
+          
           )}
         </Card>
       </div>
