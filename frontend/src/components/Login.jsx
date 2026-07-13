@@ -66,7 +66,7 @@ export default function Login({ onLogin }) {
               />
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <Button color="gray" outline type="button" type="submit">
+              <Button color="blue" outline type="button" type="submit">
                 {isRegister ? 'Register' : 'Login'}
               </Button>
               <Button color="gray" outline type="button" onClick={() => setIsRegister(!isRegister)}>

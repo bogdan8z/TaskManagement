@@ -52,14 +52,14 @@ export default function TaskDashboard({ token, onLogout }) {
       <div className="mx-auto w-full max-w-3xl px-4">
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-3xl font-semibold text-slate-900">Your Tasks</h2>
-            <p className="mt-1 text-sm text-slate-500">A quick place to manage your task list.</p>
+            <h2 className="text-3xl font-semibold text-slate-900">My Tasks</h2>
+            <p className="mt-1 text-sm text-slate-500">A quick place to manage task list.</p>
           </div>
-          <div className="flex flex-wrap gap-2">
-          <Avatar img="/images/prf-50.jpg" alt="avatar of you" rounded />          
-          <Button color="dark" outline onClick={onLogout}>
-            Logout
-          </Button>
+          <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
+            <Avatar img="/images/prf-50.jpg" alt="avatar of you" rounded />
+            <Button color="dark" outline onClick={onLogout}>
+              Logout
+            </Button>
           </div>
         </div>
 
@@ -120,9 +120,6 @@ export default function TaskDashboard({ token, onLogout }) {
                 </Card>
               ))}
             </div>
-           
-           
-          
           )}
         </Card>
       </div>
