@@ -10,15 +10,13 @@ import { DataGrid } from '@mui/x-data-grid';
 import ButtonAppBar from './TopMenuAppBar';
 
 import { getTasks, createTask } from '../api'
-
-
  
 const paginationModel = { page: 0, pageSize: 5 };
  
 const dateFormatter = new Intl.DateTimeFormat("en-US");
 const columns = [
 { field: 'id', headerName: 'ID', width: 70 },
-{ field: 'title', headerName: 'Title', width: 330 },
+{ field: 'title', headerName: 'Title', width: 200 },
 {field: 'status',
     headerName: 'Status',
     width: 60,
@@ -33,9 +31,9 @@ const columns = [
     width: 100,
     renderCell: (params) => (
       <div>
-        {params.row.priority === 'high' ?  <label style={{ color: green[500] }}>HIGH</label>: 
-        params.row.priority === 'medium' ?  <label style={{ color: yellow[500] }}>MEDIUM</label>:
-        <label style={{ color: red[500] }}>LOW</label>}
+        {params.row.priority === 'high' ?  <label className='task-high task-mrg'>High</label>: 
+        params.row.priority === 'medium' ?  <label className='task-medium task-mrg'>Medium</label>:
+        <label className='task-low task-mrg'>Low</label>}
       
       </div>
     ),
@@ -86,16 +84,16 @@ export default function TaskDashboard2({ token, onLogout }) {
       await createTask(token, trimmedTitle)
       setTitle('')
       await load()
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setSubmitting(false)
-    }
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setSubmitting(false)
+      }
   }
 
   return (
     <div className="min-h-screen bg-slate-50 py-10">
-      <ButtonAppBar></ButtonAppBar>
+      <ButtonAppBar onLogout={onLogout}></ButtonAppBar>
     <Card>
        <div className="mb-2 mt-3 block">
           <form onSubmit={addTask}>       
@@ -112,39 +110,31 @@ export default function TaskDashboard2({ token, onLogout }) {
               <CircularProgress aria-label="Loading tasks…" />
             </div>
           )}
-
-          {error && (
-            <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
-              <span>{error}</span>
-            </Alert>
-          )}
-
-          {!loading && !error && tasks.length === 0 && (
-            <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-600">
-              You have no tasks yet. Add your first one to get started.
-            </div>
-          )}
-          {!loading && !error && tasks.length > 0 && (
-            <div className="grid gap-3">
-              <Paper sx={{ height: 400, width: '100%' }}>
-              <DataGrid
-              rows={tasks}
-              columns={columns}
-              initialState={{ pagination: { paginationModel } }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
-              sx={{ border: 0 }}
-              />
-              </Paper>
-              </div>
-          )}
-
+      {error && (
+        <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+          <span>{error}</span>
+        </Alert>
+      )}
+      {!loading && !error && tasks.length === 0 && (
+        <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-600">
+          You have no tasks yet. Add your first one to get started.
+        </div>
+      )}
+      {!loading && !error && tasks.length > 0 && (
+        <div className="grid gap-3">
+          <Paper sx={{ height: 400, width: '100%' }}>
+          <DataGrid
+          rows={tasks}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+          sx={{ border: 0 }}
+          />
+          </Paper>
+          </div>
+      )}
     </Card>
-
-
-
-
-
     </div>
   )
 }

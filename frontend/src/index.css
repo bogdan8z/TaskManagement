@@ -27,3 +27,29 @@ textarea,
 select {
   font: inherit;
 }
+
+.task-high
+{
+  background: antiquewhite;
+  color: orangered;
+  font-weight: bold;
+}
+
+.task-medium
+{
+  background: yellow;
+  color: orange;
+  font-weight: bold;
+}
+
+.task-low
+{
+  background: aqua;
+  color: aliceblue;
+  font-weight: bold;
+
+}
+
+.task-mrg{
+ padding: 4px;
+}

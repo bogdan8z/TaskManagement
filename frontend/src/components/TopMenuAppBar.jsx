@@ -1,7 +1,7 @@
 import { IconButton, Button, Typography, Toolbar, Box, AppBar, Avatar } from '@mui/material';
 import Menu from '@mui/material/Menu';
  
-export default function TopMenuAppBar() {
+export default function TopMenuAppBar({ onLogout }) {
 return (
 <Box sx={{ flexGrow: 1 }}>
     <AppBar position="static">
@@ -19,7 +19,7 @@ return (
                 My Tasks
             </Typography>
             <Avatar alt="avatar of me" src="/static/images/prf-50.jpg" />
-            <Button color="inherit">Logout</Button>
+            <Button color="inherit" onClick={onLogout}>Logout</Button>
         </Toolbar>
     </AppBar>
 </Box>
