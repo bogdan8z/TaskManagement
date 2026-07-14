@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Login from './components/Login'
-import TaskDashboard from './components/TaskDashboard'
+import TaskDashboard2 from './components/TaskDashboard2'
 
 export default function App() {
   const [token, setToken] = useState(null)
@@ -10,7 +10,7 @@ export default function App() {
       {!token ? (
         <Login onLogin={setToken} />
       ) : (
-        <TaskDashboard token={token} onLogout={() => setToken(null)} />
+        <TaskDashboard2 token={token} onLogout={() => setToken(null)} />
       )}
     </div>
   )
