@@ -5,6 +5,7 @@ This frontend is a lightweight React + Vite client for the task manager backend.
 ## Tech stack
 - React 18
 - Vite for development and build tooling
+- Material UI (MUI) for component styling
 - JavaScript/JSX for component-based UI
 - Fetch API for REST communication with the backend
 

@@ -1,8 +1,52 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, TextInput, Label, Spinner, Alert, Avatar, Badge } from 'flowbite-react'
 import { FiMinusCircle, FiPocket  } from "react-icons/fi";
 
+import { red, yellow, green } from '@mui/material/colors';
+import {Alert, Card, IconButton, Button, Typography, Toolbar, Box, AppBar, Paper, Avatar, CircularProgress, TextField } from '@mui/material';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import DoDisturbOnOutlinedIcon from '@mui/icons-material/DoDisturbOnOutlined';
+import { DataGrid } from '@mui/x-data-grid';
+
+import ButtonAppBar from './TopMenuAppBar';
+
 import { getTasks, createTask } from '../api'
+ 
+const paginationModel = { page: 0, pageSize: 5 };
+ 
+const dateFormatter = new Intl.DateTimeFormat("en-US");
+const columns = [
+{ field: 'id', headerName: 'ID', width: 70 },
+{ field: 'title', headerName: 'Title', width: 200 },
+{field: 'status',
+    headerName: 'Status',
+    width: 60,
+    renderCell: (params) => (
+      <div>
+        {params.row.completed ? <TaskAltIcon color="success" fontSize="small" /> : <DoDisturbOnOutlinedIcon color="secondary" fontSize="small" />}
+      </div>
+    ),
+},
+{field: 'priority',
+    headerName: 'Priority',
+    width: 100,
+    renderCell: (params) => (
+      <div>
+        {params.row.priority === 'high' ?  <label className='task-high task-mrg'>High</label>: 
+        params.row.priority === 'medium' ?  <label className='task-medium task-mrg'>Medium</label>:
+        <label className='task-low task-mrg'>Low</label>}
+      
+      </div>
+    ),
+},
+ {  
+    field: "dueDate",
+    headerName: "Due Date",
+    width: 100,
+    align: "center",
+    type: "date",
+    valueFormatter: (value) => dateFormatter.format(value),
+  }
+];
 
 export default function TaskDashboard({ token, onLogout }) {
   const [tasks, setTasks] = useState([])
@@ -40,89 +84,57 @@ export default function TaskDashboard({ token, onLogout }) {
       await createTask(token, trimmedTitle)
       setTitle('')
       await load()
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setSubmitting(false)
-    }
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setSubmitting(false)
+      }
   }
-
+  
   return (
     <div className="min-h-screen bg-slate-50 py-10">
-      <div className="mx-auto w-full max-w-3xl px-4">
-        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-3xl font-semibold text-slate-900">My Tasks</h2>
-            <p className="mt-1 text-sm text-slate-500">A quick place to manage task list.</p>
-          </div>
-          <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
-            <Avatar img="/images/prf-50.jpg" alt="avatar of you" rounded />
-            <Button color="dark" outline onClick={onLogout}>
-              Logout
-            </Button>
-          </div>
-        </div>
-
-        <Card>
-          <form onSubmit={addTask} className="mb-4 grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="taskTitle" value="Task title" />
-              </div>
-              <TextInput
-                id="taskTitle"
-                placeholder="Add a new task"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-            </div>
-            <Button type="submit" disabled={submitting || !title.trim()}>
-              {submitting ? 'Adding...' : 'Add Task'}
+      <ButtonAppBar onLogout={onLogout}></ButtonAppBar>
+    <Card>
+       <div className="mb-2 mt-3 block">
+          <form onSubmit={addTask}>       
+            <TextField id="outline-basic"  value={title} label="Add new task" variant="outlined" onChange={(e) => setTitle(e.target.value)} />
+            <Button type="submit" style={{ display: 'none' }} disabled={submitting || !title.trim()}>
+                {submitting ? 'Adding...' : 'Add Task'}
             </Button>
           </form>
-
-          {loading && (
+       <div>
+       </div>
+       </div>
+       {loading && (
             <div className="mb-4 flex items-center gap-2 text-slate-600">
-              <Spinner size="sm" />
-              Loading tasks...
+              <CircularProgress aria-label="Loading tasks…" />
             </div>
           )}
-
-          {error && (
-            <Alert color="failure" className="mb-4">
-              <span>{error}</span>
-            </Alert>
-          )}
-
-          {!loading && !error && tasks.length === 0 && (
-            <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-600">
-              You have no tasks yet. Add your first one to get started.
-            </div>
-          )}
-          {!loading && !error && tasks.length > 0 && (
-            <div className="grid gap-3">
-              {tasks.map((task) => (
-                <Card key={task.id} className="bg-slate-50">
-                   <div className="flex items-center space-x-4">
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-medium text-gray-900 dark:text-white">{task.title}</p>
-                        <p className="truncate text-sm text-gray-500 dark:text-gray-400"></p>
-                      </div>
-                      <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                        {task.isCompleted ? (
-                        <div><Badge color="success" icon={FiPocket} /></div>
-                      ) : (
-                     <div><Badge color="indigo" icon={FiMinusCircle} /></div>
-                      )}
-                        </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          )}
-        </Card>
-      </div>
+      {error && (
+        <Alert icon={<CheckIcon fontSize="inherit" />} severity="error">
+          <span>{error}</span>
+        </Alert>
+      )}
+      {!loading && !error && tasks.length === 0 && (
+        <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-5 text-sm text-slate-600">
+          You have no tasks yet. Add your first one to get started.
+        </div>
+      )}
+      {!loading && !error && tasks.length > 0 && (
+        <div className="grid gap-3">
+          <Paper sx={{ height: 400, width: '100%' }}>
+          <DataGrid
+          rows={tasks}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+          sx={{ border: 0 }}
+          />
+          </Paper>
+          </div>
+      )}
+    </Card>
     </div>
   )
 }

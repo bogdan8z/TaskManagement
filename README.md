@@ -9,7 +9,7 @@ A personal project to demonstrate production-ready backend architecture and mode
 
 ## Frontend
 - Built with React 18 and Vite.
-- UI components from Flowbite React (Tailwind CSS-based).
+- UI components from Material UI (MUI).
 - Provides the login/register experience and the task dashboard UI.
 - Uses browser-based fetch requests to talk to the backend.
 - Sends JWT tokens in the Authorization header for protected requests.

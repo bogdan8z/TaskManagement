@@ -17,8 +17,6 @@
         "@mui/x-data-grid": "^9.9.0",
         "@mui/x-date-pickers": "^9.9.0",
         "autoprefixer": "^10.5.2",
-        "flowbite": "^4.0.2",
-        "flowbite-react": "^0.12.17",
         "postcss": "^8.5.16",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
