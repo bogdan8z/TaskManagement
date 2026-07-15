@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { FiMinusCircle, FiPocket  } from "react-icons/fi";
 
 import { red, yellow, green } from '@mui/material/colors';
 import {Alert, Card, IconButton, Button, Typography, Toolbar, Box, AppBar, Paper, Avatar, CircularProgress, TextField } from '@mui/material';
@@ -95,16 +94,14 @@ export default function TaskDashboard({ token, onLogout }) {
     <div className="min-h-screen bg-slate-50 py-10">
       <ButtonAppBar onLogout={onLogout}></ButtonAppBar>
     <Card>
-       <div className="mb-2 mt-3 block">
+       <Box  sx={{ mb: 2, mt:3 }}>
           <form onSubmit={addTask}>       
             <TextField id="outline-basic"  value={title} label="Add new task" variant="outlined" onChange={(e) => setTitle(e.target.value)} />
             <Button type="submit" style={{ display: 'none' }} disabled={submitting || !title.trim()}>
                 {submitting ? 'Adding...' : 'Add Task'}
             </Button>
-          </form>
-       <div>
-       </div>
-       </div>
+          </form>      
+       </Box>
        {loading && (
             <div className="mb-4 flex items-center gap-2 text-slate-600">
               <CircularProgress aria-label="Loading tasks…" />
