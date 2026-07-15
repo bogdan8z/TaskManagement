@@ -85,6 +85,7 @@ public class Program
 
         app.Run();
     }
+
     private static void ConnectToDb(WebApplicationBuilder builder)
     {
         var useInMemoryDatabase = builder.Configuration.GetValue<bool?>("UseInMemoryDatabase");
